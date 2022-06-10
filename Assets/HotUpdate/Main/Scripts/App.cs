@@ -81,6 +81,7 @@ public class App
         await LoadDllByteFile("DLL/UniTask.Linq.bytes");
         await LoadDllByteFile("DLL/UniTask.TextMeshPro.bytes");
         await LoadDllByteFile("DLL/Unity.Addressables.bytes");
+        await LoadDllByteFile("DLL/Unity.ResourceManager.bytes");
     }
 
     private static async Task LoadDllByteFile(string asset)
@@ -102,7 +103,7 @@ public class App
 
     static unsafe void LoadMetadataForAOTAssembly(TextAsset textAsset)
     {
-        Debug.Log("Start Load Metadata For AOT Assembly. data size:" + textAsset.dataSize);
+        Debug.Log("Start Load Metadata For AOT Assembly. data size:" + textAsset.bytes.Length);
         byte[] dllBytes = textAsset.bytes;
         fixed (byte* ptr = dllBytes)
         {

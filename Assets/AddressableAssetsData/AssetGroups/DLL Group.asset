@@ -21,6 +21,14 @@ MonoBehaviour:
     m_Address: DLL
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: ded95ffdbc716594cb4cb89f6e6e125b
+    m_Address: DLL/mscorlib.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 0c3c59a6bb5ddce41a94ff5bf423b020
+    m_Address: DLL/HotUpdate.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 51b92cee9b3b6b64c9dcf190eefea171, type: 2}
   m_SchemaSet:

@@ -29,9 +29,9 @@ namespace BootStrap
             Debug.Log("Load HotUpdate Dll And Run Main");
             System.Reflection.Assembly hotUpdateAssembly;
             //#if UNITY_EDITOR
-            //            hotUpdateAssembly = AppDomain.CurrentDomain.GetAssemblies().First(assembly => assembly.GetName().Name == "HotUpdate");
+            //            hotUpdateAssembly = AppDomain.CurrentDomain.GetAssemblies().First(assembly => assembly.GetName().Name == "DLL/HotUpdate.bytes");
             //#else
-            TextAsset dllBytes = await Addressables.LoadAssetAsync<TextAsset>("HotUpdate").Task;
+            TextAsset dllBytes = await Addressables.LoadAssetAsync<TextAsset>("DLL/HotUpdate.bytes");
             hotUpdateAssembly = System.Reflection.Assembly.Load(dllBytes.bytes);
             //hotUpdateAssembly = System.Reflection.Assembly.GetAssembly(typeof(App));
             //#endif
@@ -51,21 +51,20 @@ namespace BootStrap
         {
             Debug.Log("Update catalog start");
             //初始化Addressable
-            var init = Addressables.InitializeAsync();
-            await init.Task;
+            await Addressables.InitializeAsync();
 
             //开始连接服务器检查更新
-            var handle = Addressables.CheckForCatalogUpdates(false);
-            await handle.Task;
-            Debug.Log("check catalog status " + handle.Status);
-            if (handle.Status == AsyncOperationStatus.Succeeded)
+            var checkForCatalogUpdatesHandle = Addressables.CheckForCatalogUpdates(false);
+            await checkForCatalogUpdatesHandle;
+            Debug.Log("check catalog status " + checkForCatalogUpdatesHandle.Status);
+            if (checkForCatalogUpdatesHandle.Status == AsyncOperationStatus.Succeeded)
             {
-                List<string> catalogs = handle.Result;
+                List<string> catalogs = checkForCatalogUpdatesHandle.Result;
                 if (catalogs != null && catalogs.Count > 0)
                 {
                     foreach (var catalog in catalogs)
                     {
-                        Debug.Log("catalog  " + catalog);
+                        Debug.Log("catalog:  " + catalog);
                     }
                     Debug.Log("download catalog start ");
                     var updateHandle = Addressables.UpdateCatalogs(catalogs, false);
@@ -86,7 +85,7 @@ namespace BootStrap
                     Debug.Log("dont need update catalogs");
                 }
             }
-            Addressables.Release(handle);
+            Addressables.Release(checkForCatalogUpdatesHandle);
         }
 
         public void DownLoad()

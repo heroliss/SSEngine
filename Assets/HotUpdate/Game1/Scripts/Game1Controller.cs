@@ -6,6 +6,9 @@ using UnityEngine.AddressableAssets;
 using HotUpdate.GameCommon;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using System.Threading.Tasks;
+using System;
+using Random = UnityEngine.Random;
 
 namespace HotUpdate.Game1
 {
@@ -17,8 +20,7 @@ namespace HotUpdate.Game1
 
         private void OnEnable()
         {
-            InstantiateButton.onClick.AddListener(InstantiateObj /*UniTask.UnityAction(InstantiateObj)*/);
-
+            InstantiateButton.onClick.AddListener(UniTask.UnityAction(InstantiateObj));
         }
 
         private void OnDisable()
@@ -26,12 +28,11 @@ namespace HotUpdate.Game1
             InstantiateButton.onClick.RemoveAllListeners();
         }
 
-        async void InstantiateObj()
+        async UniTaskVoid InstantiateObj()
         {
             var randomPos = new Vector3(Random.Range(-5f, 5), Random.Range(-2f, 5), 0);
             var go = await Addressables.InstantiateAsync(PrefabReference, randomPos, Random.rotation, transform).Task;
             var colorChanger = go.GetComponent<ColorChanger>();
-            colorChanger.SetColor(Random.ColorHSV());
             go.transform.localScale = Vector3.zero;
             await go.transform.DOScale(Vector3.one, 1f).SetEase(Ease.OutBounce).AsyncWaitForCompletion();
             colorChanger.ResetColor();

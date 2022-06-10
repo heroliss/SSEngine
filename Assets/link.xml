@@ -1,4 +1,11 @@
 <linker>
+  <assembly fullname="UniTask" preserve="all" />
+  <assembly fullname="UniTask.Linq" preserve="all" />
+  <assembly fullname="UniTask.DOTween" preserve="all" />
+  <assembly fullname="UniTask.TextMeshPro" preserve="all" />
+  <assembly fullname="UniTask.Addressables" preserve="all" />
+  <assembly fullname="Unity.Addressables" preserve="all" />
+	<assembly fullname="Unity.Main" preserve="all" />
 	<assembly fullname="Unity.Main" preserve="all" />
 	<assembly fullname="Unity.HotUpdate" preserve="all" />
 	<assembly fullname="Unity.HuatuoApi" preserve="all" />
