@@ -122,7 +122,28 @@ namespace HuaTuo
 
         public void OnPostBuildPlayerScriptDLLs(BuildReport report)
         {
-
+            var dllList = AssetDatabase.LoadAssetAtPath<BootStrap.DllList>("Assets/HotUpdate/DLL/DllList.asset");
+            string targetRoot = "./Assets/HotUpdate/DLL/StrippedDll";
+            if (Directory.Exists(targetRoot))
+            {
+                Directory.Delete(targetRoot, true);
+            }
+            Directory.CreateDirectory(targetRoot);
+            foreach (var item in dllList.List)
+            {
+                string dllName = item + ".dll";
+                var dllPath = Path.Combine("./Temp/StagingArea/Data/Managed", dllName);
+                if (File.Exists(dllPath))
+                {
+                    var targetPath = Path.Combine(targetRoot, item + ".bytes");
+                    File.Copy(dllPath, targetPath, true);
+                    Debug.Log("更新Dll：" + targetPath);
+                }
+                else
+                {
+                    Debug.LogError($"更新DLl失败！文件不存在： {dllPath}");
+                }
+            }
         }
 
         public string GenerateAdditionalLinkXmlFile(BuildReport report, UnityLinkerBuildPipelineData data)

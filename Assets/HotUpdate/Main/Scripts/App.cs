@@ -2,15 +2,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-struct MyValue
+class MyValue
 {
     public int x;
     public float y;
     public string s;
 }
+enum EEE { aaa, bbb }
 public class App
 {
     public static void Main()
@@ -52,9 +54,12 @@ public class App
     public static void TestAOTGeneric()
     {
         var arr = new List<MyValue>();
-        arr.Add(new MyValue() { x = 1000, y = 144550, s = "abcghjdfgjhdgh" });
-        var e = arr[0];
-        Debug.LogFormat("=======> AOT泛型测试：   x:{0} y:{1} s:{2}", e.x, e.y, e.s);
+        Dictionary<EEE, List<MyValue>> dic = new Dictionary<EEE, List<MyValue>>();
+        dic.Add(EEE.bbb, new List<MyValue>());
+        dic[EEE.bbb].Add(new MyValue() { x = 00000, y = 1111, s = "6578" });
+        KeyValuePair<EEE, List<MyValue>> pair = dic.ElementAt(0);
+        Debug.LogFormat("=======> AOT泛型测试：   x:{0} y:{1} s:{2}", dic[EEE.bbb][0].x, dic[EEE.bbb][0].y, dic[EEE.bbb][0].s);
+        Debug.LogFormat("=======> AOT泛型测试222：   x:{0} y:{1} s:{2}", pair.Value[0].x, pair.Value[0].y, pair.Value[0].s);
     }
 
     /// <summary>
@@ -74,14 +79,12 @@ public class App
         //
         // 加载打包时 unity在build目录下生成的 裁剪过的 mscorlib，注意，不能为原始mscorlib
         //
-        await LoadDllByteFile("DLL/mscorlib.bytes");
-        await LoadDllByteFile("DLL/UniTask.Addressables.bytes");
-        await LoadDllByteFile("DLL/UniTask.bytes");
-        await LoadDllByteFile("DLL/UniTask.DOTween.bytes");
-        await LoadDllByteFile("DLL/UniTask.Linq.bytes");
-        await LoadDllByteFile("DLL/UniTask.TextMeshPro.bytes");
-        await LoadDllByteFile("DLL/Unity.Addressables.bytes");
-        await LoadDllByteFile("DLL/Unity.ResourceManager.bytes");
+        var dllList = await Addressables.LoadAssetAsync<BootStrap.DllList>("DLL/DllList").Task;
+        Debug.Log("====================>" + dllList); //TODO: ？？？？？？？？？？？
+        foreach (var dllName in dllList.List)
+        {
+            await LoadDllByteFile($"DLL/{dllName}.bytes");
+        }
     }
 
     private static async Task LoadDllByteFile(string asset)

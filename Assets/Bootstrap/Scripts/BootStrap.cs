@@ -68,7 +68,7 @@ namespace BootStrap
                     }
                     Debug.Log("download catalog start ");
                     var updateHandle = Addressables.UpdateCatalogs(catalogs, false);
-                    await updateHandle.Task;
+                    await updateHandle;
                     foreach (var item in updateHandle.Result)
                     {
                         Debug.Log("catalog result " + item.LocatorId);
